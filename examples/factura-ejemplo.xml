@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dte:GTDocumento xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0" Version="0.1">
+  <dte:SAT ClaseDocumento="dte">
+    <dte:DTE ID="DatosCertificados">
+      <dte:DatosEmision ID="DatosEmision">
+        <dte:DatosGenerales CodigoMoneda="GTQ" FechaHoraEmision="2026-05-26T09:30:00-06:00" Tipo="FACT"/>
+        <dte:Emisor AfiliacionIVA="GEN" CodigoEstablecimiento="1" CorreoEmisor="ventas@empresa.gt" NITEmisor="1234567-8" NombreComercial="Empresa Demo" NombreEmisor="Empresa Demo, S.A.">
+          <dte:DireccionEmisor>
+            <dte:Direccion>Ciudad de Guatemala</dte:Direccion>
+            <dte:Municipio>Guatemala</dte:Municipio>
+            <dte:Departamento>Guatemala</dte:Departamento>
+            <dte:Pais>GT</dte:Pais>
+          </dte:DireccionEmisor>
+        </dte:Emisor>
+        <dte:Receptor CorreoReceptor="cliente@correo.com" IDReceptor="CF" NombreReceptor="Cliente Demo">
+          <dte:DireccionReceptor>
+            <dte:Direccion>Guatemala</dte:Direccion>
+          </dte:DireccionReceptor>
+        </dte:Receptor>
+        <dte:Items>
+          <dte:Item BienOServicio="S" NumeroLinea="1">
+            <dte:Cantidad>1</dte:Cantidad>
+            <dte:UnidadMedida>UNI</dte:UnidadMedida>
+            <dte:Descripcion>Servicio profesional</dte:Descripcion>
+            <dte:PrecioUnitario>1200.00</dte:PrecioUnitario>
+            <dte:Precio>1200.00</dte:Precio>
+            <dte:Descuento>0.00</dte:Descuento>
+            <dte:Impuestos>
+              <dte:Impuesto>
+                <dte:NombreCorto>IVA</dte:NombreCorto>
+                <dte:MontoImpuesto>128.57</dte:MontoImpuesto>
+              </dte:Impuesto>
+            </dte:Impuestos>
+            <dte:Total>1200.00</dte:Total>
+          </dte:Item>
+          <dte:Item BienOServicio="B" NumeroLinea="2">
+            <dte:Cantidad>2</dte:Cantidad>
+            <dte:UnidadMedida>UNI</dte:UnidadMedida>
+            <dte:Descripcion>Producto personalizado</dte:Descripcion>
+            <dte:PrecioUnitario>350.00</dte:PrecioUnitario>
+            <dte:Precio>700.00</dte:Precio>
+            <dte:Descuento>25.00</dte:Descuento>
+            <dte:Impuestos>
+              <dte:Impuesto>
+                <dte:NombreCorto>IVA</dte:NombreCorto>
+                <dte:MontoImpuesto>72.32</dte:MontoImpuesto>
+              </dte:Impuesto>
+            </dte:Impuestos>
+            <dte:Total>675.00</dte:Total>
+          </dte:Item>
+        </dte:Items>
+        <dte:Totales>
+          <dte:TotalImpuestos>
+            <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="200.89"/>
+          </dte:TotalImpuestos>
+          <dte:GranTotal>1875.00</dte:GranTotal>
+        </dte:Totales>
+      </dte:DatosEmision>
+      <dte:Certificacion>
+        <dte:NumeroAutorizacion Serie="A1B2C3" Numero="987654321">A1B2C3-987654321</dte:NumeroAutorizacion>
+      </dte:Certificacion>
+    </dte:DTE>
+  </dte:SAT>
+</dte:GTDocumento>

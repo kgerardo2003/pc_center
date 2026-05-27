@@ -15,6 +15,8 @@ Aplicacion web estatica para cargar una factura en XML, personalizar logo y colo
 
 La exportacion ajusta automaticamente la factura para que salga en una sola hoja del formato seleccionado. Si la factura tiene muchos articulos, el contenido se compacta y reduce para evitar paginas adicionales.
 
+El logo y los ajustes visuales quedan guardados en este navegador. Despues de configurarlos una vez, al volver a abrir la app solo necesitas cargar el XML de la factura.
+
 ## Publicar en GitHub Pages
 
 Opcion con GitHub web:

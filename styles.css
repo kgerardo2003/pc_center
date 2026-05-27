@@ -581,6 +581,8 @@ th {
   color: #fff;
   font-size: 0.8rem;
   text-transform: uppercase;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 td {
@@ -730,7 +732,7 @@ tbody tr:last-child td {
 }
 
 .template-modern th {
-  background: color-mix(in srgb, var(--ink) 88%, var(--primary));
+  background: var(--primary);
 }
 
 .template-compact {
@@ -1062,7 +1064,9 @@ tbody tr:last-child td {
     border-bottom-width: 2px;
   }
 
+  th,
   .qr-code {
+    -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 

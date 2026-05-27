@@ -4,6 +4,8 @@ const state = {
   paperSize: "letter",
   logoAlign: "left",
   showQr: true,
+  logoDataUrl: "",
+  logoFileName: "",
   theme: {
     primary: "#164e63",
     accent: "#d97706",
@@ -12,7 +14,70 @@ const state = {
   },
 };
 
+const PREFERENCES_KEY = "facturaXmlPersonalizador.v1";
 let printScalePreparedAt = 0;
+
+function readPreferences() {
+  try {
+    const raw = window.localStorage.getItem(PREFERENCES_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (error) {
+    return {};
+  }
+}
+
+function savePreferences() {
+  const preferences = {
+    template: state.template,
+    paperSize: state.paperSize,
+    logoAlign: state.logoAlign,
+    showQr: state.showQr,
+    logoDataUrl: state.logoDataUrl,
+    logoFileName: state.logoFileName,
+    logoSize: els.logoSizeInput.value,
+    logoZoom: els.logoZoomInput.value,
+    note: els.noteInput.value,
+    theme: state.theme,
+  };
+
+  try {
+    window.localStorage.setItem(PREFERENCES_KEY, JSON.stringify(preferences));
+    return true;
+  } catch (error) {
+    window.alert("El logo es demasiado pesado para guardarlo en este navegador. Se mostrara ahora, pero tendras que volver a cargarlo al abrir la app.");
+    return false;
+  }
+}
+
+function applySavedPreferences(preferences) {
+  if (!preferences || typeof preferences !== "object") return;
+
+  if (preferences.theme && typeof preferences.theme === "object") {
+    state.theme = {
+      ...state.theme,
+      ...preferences.theme,
+    };
+    els.primaryColor.value = state.theme.primary;
+    els.accentColor.value = state.theme.accent;
+    els.paperColor.value = state.theme.paper;
+    els.inkColor.value = state.theme.ink;
+  }
+
+  if (preferences.logoDataUrl) {
+    state.logoDataUrl = preferences.logoDataUrl;
+    state.logoFileName = preferences.logoFileName || "Logo guardado";
+    els.logoPreview.src = preferences.logoDataUrl;
+    els.logoFileName.textContent = state.logoFileName;
+  }
+
+  if (preferences.note) {
+    els.noteInput.value = preferences.note;
+  }
+
+  state.showQr = preferences.showQr !== false;
+  els.showQrInput.checked = state.showQr;
+}
+
 
 const demoXml = `<?xml version="1.0" encoding="UTF-8"?>
 <dte:GTDocumento xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0" Version="0.1">
@@ -861,8 +926,11 @@ async function handleXmlFile(file) {
 async function handleLogoFile(file) {
   if (!file) return;
   const dataUrl = await readFileAsDataUrl(file);
+  state.logoDataUrl = dataUrl;
+  state.logoFileName = file.name;
   els.logoPreview.src = dataUrl;
   els.logoFileName.textContent = file.name;
+  savePreferences();
 }
 
 function bindDropZone(zone, callback) {
@@ -893,6 +961,7 @@ function bindEvents() {
     input.addEventListener("input", () => {
       state.theme[key] = input.value;
       applyTheme();
+      savePreferences();
     });
   });
 
@@ -908,26 +977,43 @@ function bindEvents() {
     els.paperColor.value = state.theme.paper;
     els.inkColor.value = state.theme.ink;
     applyTheme();
+    savePreferences();
   });
 
   document.querySelectorAll("[data-template]").forEach((button) => {
-    button.addEventListener("click", () => applyTemplate(button.dataset.template));
+    button.addEventListener("click", () => {
+      applyTemplate(button.dataset.template);
+      savePreferences();
+    });
   });
 
   document.querySelectorAll("[data-paper]").forEach((button) => {
-    button.addEventListener("click", () => applyPaperSize(button.dataset.paper));
+    button.addEventListener("click", () => {
+      applyPaperSize(button.dataset.paper);
+      savePreferences();
+    });
   });
 
   document.querySelectorAll("[data-logo-align]").forEach((button) => {
-    button.addEventListener("click", () => applyLogoAlign(button.dataset.logoAlign));
+    button.addEventListener("click", () => {
+      applyLogoAlign(button.dataset.logoAlign);
+      savePreferences();
+    });
   });
 
-  els.logoSizeInput.addEventListener("input", () => applyLogoSize(els.logoSizeInput.value));
-  els.logoZoomInput.addEventListener("input", () => applyLogoZoom(els.logoZoomInput.value));
+  els.logoSizeInput.addEventListener("input", () => {
+    applyLogoSize(els.logoSizeInput.value);
+    savePreferences();
+  });
+  els.logoZoomInput.addEventListener("input", () => {
+    applyLogoZoom(els.logoZoomInput.value);
+    savePreferences();
+  });
 
   els.showQrInput.addEventListener("change", () => {
     state.showQr = els.showQrInput.checked;
     renderInvoice();
+    savePreferences();
   });
 
   [
@@ -937,7 +1023,12 @@ function bindEvents() {
     els.issuerTaxInput,
     els.customerNameInput,
     els.customerTaxInput,
-  ].forEach((input) => input.addEventListener("input", renderInvoice));
+  ].forEach((input) =>
+    input.addEventListener("input", () => {
+      renderInvoice();
+      if (input === els.noteInput) savePreferences();
+    }),
+  );
 
   els.loadSampleBtn.addEventListener("click", () => {
     setInvoice(parseInvoiceXml(demoXml), "factura-ejemplo.xml", "Demo");
@@ -954,13 +1045,15 @@ function bindEvents() {
 }
 
 function boot() {
+  const preferences = readPreferences();
   bindEvents();
+  applySavedPreferences(preferences);
   applyTheme();
-  applyTemplate("classic");
-  applyPaperSize("letter");
-  applyLogoAlign("left");
-  applyLogoSize(132);
-  applyLogoZoom(100);
+  applyTemplate(preferences.template || state.template);
+  applyPaperSize(preferences.paperSize || state.paperSize);
+  applyLogoAlign(preferences.logoAlign || state.logoAlign);
+  applyLogoSize(preferences.logoSize || 132);
+  applyLogoZoom(preferences.logoZoom || 100);
   setInvoice(parseInvoiceXml(demoXml), "factura-ejemplo.xml", "Demo");
 }
 

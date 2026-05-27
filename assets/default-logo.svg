@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" role="img" aria-labelledby="title desc">
+  <title id="title">Logo por defecto</title>
+  <desc id="desc">Marca geometrica para previsualizar la factura.</desc>
+  <rect width="240" height="240" rx="24" fill="#164e63"/>
+  <path fill="#d97706" d="M50 58h140v28H84v34h91v28H84v34h106v28H50z"/>
+  <path fill="#fff" d="M107 104h32l43 78h-33l-25-49-25 49H66z"/>
+</svg>
