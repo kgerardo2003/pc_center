@@ -17,6 +17,8 @@ La exportacion ajusta automaticamente la factura para que salga en una sola hoja
 
 El logo y los ajustes visuales quedan guardados en este navegador. Despues de configurarlos una vez, al volver a abrir la app solo necesitas cargar el XML de la factura.
 
+El formato de impresion usa margen de pagina cero y margen interno propio para evitar que el navegador agregue la ruta del sitio o repositorio en el PDF.
+
 ## Publicar en GitHub Pages
 
 Opcion con GitHub web:

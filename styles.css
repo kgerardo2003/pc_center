@@ -944,22 +944,22 @@ tbody tr:last-child td {
 @media print {
   @page letterPage {
     size: letter;
-    margin: 12mm;
+    margin: 0;
   }
 
   @page halfLetterPage {
     size: 5.5in 8.5in;
-    margin: 8mm;
+    margin: 0;
   }
 
   @page ticketPage {
     size: 80mm 297mm;
-    margin: 4mm;
+    margin: 0;
   }
 
   @page {
     size: letter;
-    margin: 12mm;
+    margin: 0;
   }
 
   body {
@@ -983,7 +983,7 @@ tbody tr:last-child td {
   .invoice-page {
     width: 100%;
     min-height: auto;
-    padding: 0;
+    padding: var(--print-page-pad, 12mm);
     border: 0;
     border-radius: 0;
     box-shadow: none;
@@ -995,7 +995,18 @@ tbody tr:last-child td {
   .invoice-page.paper-ticket {
     width: 100%;
     min-height: auto;
-    padding: 0;
+  }
+
+  .invoice-page.paper-letter {
+    --print-page-pad: 12mm;
+  }
+
+  .invoice-page.paper-half-letter {
+    --print-page-pad: 8mm;
+  }
+
+  .invoice-page.paper-ticket {
+    --print-page-pad: 4mm;
   }
 
   .invoice-header {
