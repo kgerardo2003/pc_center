@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Factura XML Personalizable</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="control-panel" aria-label="Panel de personalizacion">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">FX</div>
+          <div>
+            <h1>Factura XML</h1>
+            <p>Personalizacion y PDF</p>
+          </div>
+        </div>
+
+        <section class="panel-section">
+          <div class="section-heading">
+            <span>Archivos</span>
+          </div>
+          <label class="drop-zone" for="xmlInput" id="xmlDropZone">
+            <input id="xmlInput" type="file" accept=".xml,text/xml,application/xml" />
+            <span class="drop-icon" aria-hidden="true">XML</span>
+            <strong>Cargar XML</strong>
+            <small id="xmlFileName">Sin archivo</small>
+          </label>
+
+          <label class="drop-zone compact" for="logoInput" id="logoDropZone">
+            <input id="logoInput" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+            <span class="drop-icon" aria-hidden="true">IMG</span>
+            <strong>Logo</strong>
+            <small id="logoFileName">Logo por defecto</small>
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-heading">
+            <span>Colores</span>
+            <button class="icon-button" type="button" id="resetThemeBtn" title="Restablecer colores" aria-label="Restablecer colores">R</button>
+          </div>
+          <div class="color-grid">
+            <label>
+              <span>Principal</span>
+              <input id="primaryColor" type="color" value="#164e63" />
+            </label>
+            <label>
+              <span>Acento</span>
+              <input id="accentColor" type="color" value="#d97706" />
+            </label>
+            <label>
+              <span>Fondo</span>
+              <input id="paperColor" type="color" value="#ffffff" />
+            </label>
+            <label>
+              <span>Tinta</span>
+              <input id="inkColor" type="color" value="#172033" />
+            </label>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-heading">
+            <span>Plantilla</span>
+          </div>
+          <div class="segmented" role="group" aria-label="Plantilla">
+            <button type="button" class="active" data-template="classic">Clasica</button>
+            <button type="button" data-template="modern">Moderna</button>
+            <button type="button" data-template="compact">Compacta</button>
+          </div>
+          <label class="field-label">
+            <span>Titulo</span>
+            <input id="invoiceTitleInput" type="text" value="Factura" maxlength="42" />
+          </label>
+          <label class="field-label">
+            <span>Mensaje</span>
+            <textarea id="noteInput" rows="3" maxlength="180">Gracias por su compra.</textarea>
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-heading">
+            <span>Impresion</span>
+          </div>
+          <div class="segmented" role="group" aria-label="Formato de papel">
+            <button type="button" class="active" data-paper="letter">Carta</button>
+            <button type="button" data-paper="half-letter">Media</button>
+            <button type="button" data-paper="ticket">Ticket</button>
+          </div>
+          <label class="field-label">
+            <span>Area logo</span>
+            <div class="range-row">
+              <input id="logoSizeInput" type="range" min="64" max="440" step="2" value="132" />
+              <output id="logoSizeValue" for="logoSizeInput">132 px</output>
+            </div>
+          </label>
+          <label class="field-label">
+            <span>Zoom logo</span>
+            <div class="range-row">
+              <input id="logoZoomInput" type="range" min="80" max="190" step="5" value="100" />
+              <output id="logoZoomValue" for="logoZoomInput">100%</output>
+            </div>
+          </label>
+          <div class="segmented" role="group" aria-label="Alineacion del logo">
+            <button type="button" class="active" data-logo-align="left">Izq.</button>
+            <button type="button" data-logo-align="center">Centro</button>
+            <button type="button" data-logo-align="right">Der.</button>
+          </div>
+          <label class="check-row">
+            <input id="showQrInput" type="checkbox" checked />
+            <span>Mostrar QR SAT</span>
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-heading">
+            <span>Datos</span>
+          </div>
+          <div class="form-grid">
+            <label class="field-label">
+              <span>Emisor</span>
+              <input id="issuerNameInput" type="text" />
+            </label>
+            <label class="field-label">
+              <span>NIT emisor</span>
+              <input id="issuerTaxInput" type="text" />
+            </label>
+            <label class="field-label">
+              <span>Receptor</span>
+              <input id="customerNameInput" type="text" />
+            </label>
+            <label class="field-label">
+              <span>NIT receptor</span>
+              <input id="customerTaxInput" type="text" />
+            </label>
+          </div>
+        </section>
+
+        <div class="action-bar">
+          <button class="secondary-button" type="button" id="loadSampleBtn">Ejemplo</button>
+          <button class="primary-button" type="button" id="printBtn">Exportar PDF</button>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <div class="topbar">
+          <div>
+            <p class="eyebrow">Vista previa</p>
+            <h2 id="previewName">Factura sin XML</h2>
+          </div>
+          <div class="status-pill" id="parseStatus">Demo</div>
+        </div>
+
+        <section class="invoice-stage" aria-label="Vista previa de factura">
+          <article class="invoice-page template-classic paper-letter logo-left" id="invoicePage">
+            <header class="invoice-header">
+              <div class="identity-block">
+                <div class="logo-frame">
+                  <img id="logoPreview" alt="Logo" src="assets/default-logo.svg" />
+                </div>
+                <div class="issuer-copy">
+                  <h3 id="issuerName">Empresa Demo</h3>
+                  <p id="issuerMeta">NIT: CF | Guatemala</p>
+                  <p id="issuerAddress">Ciudad de Guatemala</p>
+                </div>
+              </div>
+              <div class="document-block">
+                <p id="invoiceTitle">Factura</p>
+                <div class="document-numbers">
+                  <div class="document-number-line">
+                    <span>No. Serie:</span>
+                    <strong id="invoiceSeries">A1B2C3</strong>
+                  </div>
+                  <div class="document-number-line">
+                    <span>No. del DTE:</span>
+                    <strong id="invoiceDteNumber">987654321</strong>
+                  </div>
+                </div>
+                <span id="invoiceDate">26/05/2026</span>
+              </div>
+            </header>
+
+            <section class="summary-band">
+              <div>
+                <span>Cliente</span>
+                <strong id="customerName">Cliente Demo</strong>
+                <small id="customerMeta">NIT: CF</small>
+              </div>
+              <div>
+                <span>Moneda</span>
+                <strong id="currencyLabel">GTQ</strong>
+                <small id="documentType">FACT</small>
+              </div>
+              <div>
+                <span>Total</span>
+                <strong id="heroTotal">Q 0.00</strong>
+                <small id="taxSummary">IVA incluido</small>
+              </div>
+            </section>
+
+            <section class="items-section">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cant.</th>
+                    <th>Descripcion</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="itemsBody"></tbody>
+              </table>
+            </section>
+
+            <section class="totals-section">
+              <div class="notes-box">
+                <span>Notas</span>
+                <p id="invoiceNote">Gracias por su compra.</p>
+                <small id="certificationText">Documento generado desde XML.</small>
+              </div>
+              <div class="qr-card" id="qrCard">
+                <span>Verificacion SAT</span>
+                <div id="qrCode" class="qr-code" role="img" aria-label="Codigo QR de verificacion"></div>
+                <a id="qrLink" href="#" target="_blank" rel="noopener">Verificar documento</a>
+              </div>
+              <div class="totals-card">
+                <div>
+                  <span>Subtotal</span>
+                  <strong id="subtotalValue">Q 0.00</strong>
+                </div>
+                <div>
+                  <span>Impuestos</span>
+                  <strong id="taxValue">Q 0.00</strong>
+                </div>
+                <div class="grand-total">
+                  <span>Total</span>
+                  <strong id="totalValue">Q 0.00</strong>
+                </div>
+              </div>
+            </section>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <template id="itemRowTemplate">
+      <tr>
+        <td data-label="Cant."></td>
+        <td data-label="Descripcion"></td>
+        <td data-label="Precio"></td>
+        <td data-label="Total"></td>
+      </tr>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
